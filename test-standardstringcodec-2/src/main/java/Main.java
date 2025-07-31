@@ -1,4 +1,7 @@
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.github.f4b6a3.uuid.codec.UrnCodec;
+import com.github.f4b6a3.uuid.util.UuidValidator;
 import dev.openfunction.functions.HttpFunction;
 import dev.openfunction.functions.HttpRequest;
 import dev.openfunction.functions.HttpResponse;
@@ -6,7 +9,8 @@ import dev.openfunction.functions.Routable;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
-import com.github.f4b6a3.uuid.codec.StandardStringCodec;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 public class Main extends Routable implements HttpFunction {
 
@@ -18,35 +22,41 @@ public class Main extends Routable implements HttpFunction {
     int statusCode = 200;
     String path = request.getPath();
 
+    String requestBody = request.getReader().lines()
+        .collect(Collectors.joining(System.lineSeparator()));
+    Map<String, Object> body = mapper.readValue(requestBody, new TypeReference<>() {
+    });
+
     try {
       switch (path) {
-          case "/decode" :
-              String requestBody = request.getReader().lines()
-                .collect(Collectors.joining(System.lineSeparator()));
+        case "/isUuidUrn" :
+          if (1 != body.size()) {
+            result = "Number of parameters in request body does not match method signature.";
+            statusCode = 400;
+            break;
+          }
+          String string = "";
+          if (body.get("string") instanceof String) {
+            string = (String) body.get("string");
+          }
+          result = (Object) UrnCodec.isUuidUrn(string);
+          break;
 
-              // Map to store the request parameters (for dynamically calling methods)
-              Map<String, Object> body = mapper.readValue(requestBody,
-                 new TypeReference<Map<String, Object>>() {
-                 });
-              // Ensure the number of parameters in the request body matches the method signature
-              if (1 != body.size()){
-                 // Set result to an error message and break out of the case
-                 result = "Number of parameters in request body does not match method signature.";
-                 statusCode = 400; // Set status to 400 for bad request
-                 break;
-              }
-
-              // Prepare parameters dynamically
-              Object[] params = new Object[1];
-
-              // Check if the parameter exists in the request body
-              // Set result to an error message and break out of the case
-              result = "Missing parameter: " + "string";
-              statusCode = 400; // Set status to 400 for bad request
-              break;
-
-              // Call the method based on whether it is static or not
-              result = StandardStringCodec.decode(java.lang.String string);
+        case "/isValid" :
+          if (2 != body.size()) {
+            result = "Number of parameters in request body does not match method signature.";
+            statusCode = 400;
+            break;
+          }
+          String uuid = "";
+          int version = 0;
+          if (body.get("uuid") instanceof String) {
+            uuid = (String) body.get("uuid");
+          }
+          if (body.get("version") instanceof Integer) {
+            version = (int) body.get("version");
+          }
+          result = (Object) UuidValidator.isValid(uuid, version);
           break;
 
         default:
@@ -78,7 +88,7 @@ public class Main extends Routable implements HttpFunction {
   private void sendJsonResponse(HttpResponse response, int statusCode, Object result)
       throws IOException {
     Map<String, Object> responseBody = new HashMap<>();
-    responseBody.put("statusCode", statusCode);
+    responseBody.put("statusCode", Optional.of(statusCode));
     if (statusCode == 200) {
       responseBody.put("status", "success");
       responseBody.put("data", result);
