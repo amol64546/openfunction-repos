@@ -8,8 +8,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.github.f4b6a3.uuid.UuidCreator;
-import java.util.UUID;
-import java.util.stream.Collectors;
 
 public class Main extends Routable implements HttpFunction {
 
@@ -17,14 +15,9 @@ public class Main extends Routable implements HttpFunction {
 
   @Override
   public void service(HttpRequest request, HttpResponse response) throws Exception {
-    String body = request.getReader().lines().collect(Collectors.joining(System.lineSeparator()));
-    Map<String, Object> json = mapper.readValue(body, Map.class);
-    UUID uuid = json.containsKey("uuid") ? UUID.fromString((String) json.get("uuid")) : null;
-
     Object result;
     int statusCode = 200;
     String path = request.getPath();
-
     try {
       switch (path) {
         case "/getTimeBased":
