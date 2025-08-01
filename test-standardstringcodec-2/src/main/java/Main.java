@@ -90,15 +90,11 @@ public class Main extends Routable implements HttpFunction {
     }
 
     private static void sendJsonResponse(HttpResponse response, int statusCode, Object result) {
-        response.setStatusCode(statusCode);
-        response.setContentType("application/json");
-        try {
             Map<String, Object> responseBody = new HashMap<>();
             responseBody.put("statusCode", statusCode);
             responseBody.put("result", result);
+            response.setStatusCode(statusCode);
+            response.setContentType("application/json");
             response.getWriter().write(mapper.writeValueAsString(responseBody));
-        } catch (IOException e) {
-            System.err.println("Error writing response: " + e.getMessage());
-        }
     }
 }
