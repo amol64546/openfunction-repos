@@ -26,10 +26,10 @@ public class Main extends Routable implements HttpFunction {
     private static final ObjectMapper JACKSON = new ObjectMapper();
     private static final Map<String, Function<Map<String, Object>, Object>> pathHandlers = new HashMap<>();
 
+
     static {
         pathHandlers.put("/instances", Main::instances);
-        pathHandlers.put("/isValid", Main::isValid);
-        pathHandlers.put("/isValid", Main::isValid);
+        $seen.put($method.name, true)
         pathHandlers.put("/isValid", Main::isValid);
     }
 
@@ -39,7 +39,7 @@ public class Main extends Routable implements HttpFunction {
     }
     private static Object isValid(Map<String, Object> body) {
         String uuid = InstanceUtils.getInstance(body, "uuid");
-        int version = (int) body.get("version");
+        int version = InstanceUtils.getInstance(body, "version");
         return UuidValidator.isValid(uuid, version);
     }
     private static Object isValid(Map<String, Object> body) {
