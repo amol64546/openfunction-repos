@@ -1,17 +1,10 @@
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.github.f4b6a3.uuid.UuidCreator;
-import com.github.f4b6a3.uuid.util.UuidComparator;
 import com.google.gson.Gson;
 import dev.openfunction.functions.HttpFunction;
 import dev.openfunction.functions.HttpRequest;
 import dev.openfunction.functions.HttpResponse;
 import dev.openfunction.functions.Routable;
-import models.Arg;
-import models.CreateInstanceRequest;
-import models.CreateInstanceResponse;
-import utils.InstanceUtils;
-
 import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
@@ -19,35 +12,30 @@ import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+import models.Arg;
+import models.CreateInstanceRequest;
+import models.CreateInstanceResponse;
+import utils.InstanceUtils;
 
+import java.util.UUID;
+import com.github.f4b6a3.uuid.util.UuidComparator;
 
 public class Main extends Routable implements HttpFunction {
 
-    private static final Map<String, Function<Map<String, Object>, Object>> pathHandlers = new HashMap<>();
     private static final Gson GSON = new Gson();
     private static final ObjectMapper JACKSON = new ObjectMapper();
+    private static final Map<String, Function<Map<String, Object>, Object>> pathHandlers = new HashMap<>();
 
     static {
         pathHandlers.put("/instances", Main::instances);
         pathHandlers.put("/compare", Main::compare);
-        pathHandlers.put("/getRandomBased", Main::getRandomBased);
-    }
-
-    public static Object getRandomBased(Map<String, Object> body) {
-        return UuidCreator.getRandomBased();
     }
 
     private static Object compare(Map<String, Object> body) {
-        // param instances
-        UUID uuid1 = InstanceUtils.getInstance(body, "uuid1");
-        UUID uuid2 = InstanceUtils.getInstance(body, "uuid2");
-        // class instance
-        UuidComparator uuidComparator = InstanceUtils.getInstance(body);
-
-        return uuidComparator.compare(uuid1, uuid2);
+        UuidComparator instance = InstanceUtils.getInstance(body);
+        return instance.compare((UUID) body.get("uuid1"), (UUID) body.get("uuid2"));
     }
 
-    // ===== Static code =====
 
     private static Object instances(Object object) {
         try {
@@ -130,7 +118,6 @@ public class Main extends Routable implements HttpFunction {
             throws IOException {
         Map<String, Object> responseBody = new HashMap<>();
         responseBody.put("result", result);
-        responseBody.put("message", result);
         response.setContentType("application/json");
         response.getWriter().write(JACKSON.writeValueAsString(responseBody));
     }
