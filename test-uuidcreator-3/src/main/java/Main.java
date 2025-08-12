@@ -7,11 +7,8 @@ import dev.openfunction.functions.HttpFunction;
 import dev.openfunction.functions.HttpRequest;
 import dev.openfunction.functions.HttpResponse;
 import dev.openfunction.functions.Routable;
-import models.Arg;
-import models.CreateInstanceRequest;
-import models.CreateInstanceResponse;
+import utils.HttpUtils;
 import utils.InstanceUtils;
-
 import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
@@ -20,32 +17,27 @@ import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+import com.github.f4b6a3.uuid.UuidCreator;
 
 public class Main extends Routable implements HttpFunction {
 
-    private static final Map<String, Function<Map<String, Object>, Object>> pathHandlers = new HashMap<>();
     private static final Gson GSON = new Gson();
     private static final ObjectMapper JACKSON = new ObjectMapper();
+    private static final Map<String, Function<Map<String, Object>, Object>> pathHandlers = new HashMap<>();
 
     static {
         pathHandlers.put("/instances", Main::instances);
-        pathHandlers.put("/compare", Main::compare);
+        pathHandlers.put("/getTimeBased", Main::getTimeBased);
         pathHandlers.put("/getRandomBased", Main::getRandomBased);
     }
 
-    public static Object getRandomBased(Map<String, Object> body) {
+    private static Object getTimeBased(Map<String, Object> body) {
+        return UuidCreator.getTimeBased();
+    }
+    private static Object getRandomBased(Map<String, Object> body) {
         return UuidCreator.getRandomBased();
     }
 
-    private static Object compare(Map<String, Object> body) {
-        UUID uuid1 = InstanceUtils.getInstance(body, "uuid1");
-        UUID uuid2 = InstanceUtils.getInstance(body, "uuid2");
-        UuidComparator uuidComparator = InstanceUtils.getInstance(body);
-
-        return uuidComparator.compare(uuid1, uuid2);
-    }
-
-    // ===== Static code =====
 
     private static Object instances(Object object) {
         try {
@@ -128,7 +120,6 @@ public class Main extends Routable implements HttpFunction {
             throws IOException {
         Map<String, Object> responseBody = new HashMap<>();
         responseBody.put("result", result);
-        responseBody.put("message", result);
         response.setContentType("application/json");
         response.getWriter().write(JACKSON.writeValueAsString(responseBody));
     }
