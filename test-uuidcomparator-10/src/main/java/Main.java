@@ -41,7 +41,7 @@ public class Main extends Routable implements HttpFunction {
 
     private static Object instances(Object object) {
         try {
-            CreateInstanceRequest req = (CreateInstanceRequest) object;
+            CreateInstanceRequest req = JACKSON.convertValue(object, CreateInstanceRequest.class);
             if (req.kind == null || req.kind.isBlank()) {
                 throw new RuntimeException("Request kind is required");
             }
