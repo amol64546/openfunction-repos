@@ -20,7 +20,6 @@ import models.CreateInstanceResponse;
 import utils.InstanceUtils;
 
 import com.github.f4b6a3.uuid.util.UuidValidator;
-
 import java.util.UUID;
 
 public class Main extends Routable implements HttpFunction {
@@ -31,34 +30,28 @@ public class Main extends Routable implements HttpFunction {
 
     static {
         pathHandlers.put("/instances" , Main::instances);
-        pathHandlers.put("/isValid/by-string" , Main::isValidByString);
-        pathHandlers.put("/isValid/by-string-int" , Main::isValidByStringAndInt);
-        pathHandlers.put("/isValid/by-uuid" , Main::isValidByUUID);
+                                pathHandlers.put("/isValid/by-string" , Main::isValidByString);
+                                pathHandlers.put("/isValid/by-string-int" , Main::isValidByStringAndInt);
+                                pathHandlers.put("/isValid/by-uuid" , Main::isValidByUUID);
     }
 
-    private static Object isValidByString(Map<String, Object> body) {
-        Map<String, Object> paramMap = JACKSON.convertValue(map.get("params" ), new TypeReference<>() {
-        });
-        String uuid = (String) paramMap.get("uuid" );
-        return UuidValidator.isValid(uuid);
+        private static Object isValidByString(Map<String, Object> body) {
+            Map<String, Object> paramMap = JACKSON.convertValue(map.get("params"), new TypeReference<>() {});
+    String uuid = (String) paramMap.get("uuid" );
+    return UuidValidator.isValid(uuid);
+    }
+        private static Object isValidByStringAndInt(Map<String, Object> body) {
+            Map<String, Object> paramMap = JACKSON.convertValue(map.get("params"), new TypeReference<>() {});
+    String uuid = (String) paramMap.get("uuid" );
+    int version = (int) paramMap.get("version" );
+    return UuidValidator.isValid(uuid, version);
+    }
+        private static Object isValidByUUID(Map<String, Object> body) {
+            UUID uuid = InstanceUtils.getInstance(body, "uuid" );
+    return UuidValidator.isValid(uuid);
     }
 
-    private static Object isValidByStringAndInt(Map<String, Object> body) {
-        Map<String, Object> paramMap = JACKSON.convertValue(map.get("params" ), new TypeReference<>() {
-        });
-        String uuid = (String) paramMap.get("uuid" );
-        Map<String, Object> paramMap = JACKSON.convertValue(map.get("params" ), new TypeReference<>() {
-        });
-        int version = (int) paramMap.get("version" );
-        return UuidValidator.isValid(uuid, version);
-    }
-
-    private static Object isValidByUUID(Map<String, Object> body) {
-        UUID uuid = InstanceUtils.getInstance(body, "uuid" );
-        return UuidValidator.isValid(uuid);
-    }
-
-    private static Object instances(Object object) {
+    private static Object instances (Object object){
         try {
             CreateInstanceRequest req = (CreateInstanceRequest) object;
             if (req.kind == null || req.kind.isBlank()) {
@@ -120,7 +113,7 @@ public class Main extends Routable implements HttpFunction {
     }
 
     @Override
-    public void service(HttpRequest request, HttpResponse response) throws Exception {
+    public void service (HttpRequest request, HttpResponse response) throws Exception {
         String requestBody = request.getReader().lines()
                 .collect(Collectors.joining(System.lineSeparator()));
         Map<String, Object> body = JACKSON.readValue(requestBody, new TypeReference<>() {
@@ -131,11 +124,11 @@ public class Main extends Routable implements HttpFunction {
     }
 
     @Override
-    public String getPath() {
+    public String getPath () {
         return "/*";
     }
 
-    private void sendResponse(HttpResponse response, Object result)
+    private void sendResponse (HttpResponse response, Object result)
             throws IOException {
         Map<String, Object> responseBody = new HashMap<>();
         responseBody.put("result" , result);
