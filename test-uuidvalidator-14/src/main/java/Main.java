@@ -20,6 +20,7 @@ import models.CreateInstanceResponse;
 import utils.InstanceUtils;
 
 import com.github.f4b6a3.uuid.util.UuidValidator;
+
 import java.util.UUID;
 
 public class Main extends Routable implements HttpFunction {
@@ -30,133 +31,133 @@ public class Main extends Routable implements HttpFunction {
 
     static {
         pathHandlers.put("/instances" , Main::instances);
-                                pathHandlers.put("/isValid/by-string" , Main::isValidByString);
-                                pathHandlers.put("/isValid/by-string-int" , Main::isValidByStringAndInt);
-                                pathHandlers.put("/isValid/by-uuid" , Main::isValidByUUID);
+        pathHandlers.put("/isValid/by-string" , Main::isValidByString);
+        pathHandlers.put("/isValid/by-string-int" , Main::isValidByStringAndInt);
+        pathHandlers.put("/isValid/by-uuid" , Main::isValidByUUID);
     }
 
-            private static Object isValidByString(Map<String, Object> body) {
-    String uuid =(String) body.get("uuid" );
-    return UuidValidator.isValid(uuid);
-            private static Object isValidByStringAndInt(Map<String, Object> body) {
-    String uuid =(String) body.get("uuid" );
-    int version =(int) body.get("version" );
-    return UuidValidator.isValid(uuid, version);
-            private static Object isValidByUUID(Map<String, Object> body) {
-    UUID uuid =InstanceUtils.getInstance(body, "uuid" );
-    return UuidValidator.isValid(uuid);
+    private static Object isValidByString(Map<String, Object> body) {
+        String uuid = (String) body.get("uuid" );
+        return UuidValidator.isValid(uuid);
+        private static Object isValidByStringAndInt (Map < String, Object > body){
+            String uuid = (String) body.get("uuid" );
+            int version = (int) body.get("version" );
+            return UuidValidator.isValid(uuid, version);
+            private static Object isValidByUUID (Map < String, Object > body){
+                UUID uuid = InstanceUtils.getInstance(body, "uuid" );
+                return UuidValidator.isValid(uuid);
 
-    }
-
-            private static Object isValidByString(Map<String, Object> body) {
-    String uuid =(String) body.get("uuid" );
-    return UuidValidator.isValid(uuid);
-            private static Object isValidByStringAndInt(Map<String, Object> body) {
-    String uuid =(String) body.get("uuid" );
-    int version =(int) body.get("version" );
-    return UuidValidator.isValid(uuid, version);
-            private static Object isValidByUUID(Map<String, Object> body) {
-    UUID uuid =InstanceUtils.getInstance(body, "uuid" );
-    return UuidValidator.isValid(uuid);
-
-    }
-
-            private static Object isValidByString(Map<String, Object> body) {
-    String uuid =(String) body.get("uuid" );
-    return UuidValidator.isValid(uuid);
-            private static Object isValidByStringAndInt(Map<String, Object> body) {
-    String uuid =(String) body.get("uuid" );
-    int version =(int) body.get("version" );
-    return UuidValidator.isValid(uuid, version);
-            private static Object isValidByUUID(Map<String, Object> body) {
-    UUID uuid =InstanceUtils.getInstance(body, "uuid" );
-    return UuidValidator.isValid(uuid);
-
-    }
-
-
-private static Object instances(Object object) {
-    try {
-        CreateInstanceRequest req = (CreateInstanceRequest) object;
-        if (req.kind == null || req.kind.isBlank()) {
-            throw new RuntimeException("Request kind is required" );
-        }
-
-        Class<?> aClass = Class.forName(req.className);
-
-        if (req.kind.equals("factory" )) {
-
-            // Build factory args (reuse your existing arg materialization)
-            List<Object> fValues = new ArrayList<>();
-            List<Class<?>> fTypes = new ArrayList<>();
-            if (req.args != null) {
-                for (Arg a : req.args) {
-                    Object val = InstanceUtils.materializeArg(a);
-                    fValues.add(val);
-                    fTypes.add(InstanceUtils.inferTypeForParam(a, val));
-                }
             }
 
-            // Find & invoke static factory
-            Method m = InstanceUtils.resolveStaticFactory(aClass, req.name, fTypes);
-            Object instance = m.invoke(null, fValues.toArray());
+            private static Object isValidByString (Map < String, Object > body){
+                String uuid = (String) body.get("uuid" );
+                return UuidValidator.isValid(uuid);
+                private static Object isValidByStringAndInt (Map < String, Object > body){
+                    String uuid = (String) body.get("uuid" );
+                    int version = (int) body.get("version" );
+                    return UuidValidator.isValid(uuid, version);
+                    private static Object isValidByUUID (Map < String, Object > body){
+                        UUID uuid = InstanceUtils.getInstance(body, "uuid" );
+                        return UuidValidator.isValid(uuid);
 
-            byte[] bytes = GSON.toJson(instance).getBytes(java.nio.charset.StandardCharsets.UTF_8);
-            String b64 = Base64.getEncoder().encodeToString(bytes);
-            return new CreateInstanceResponse(req.className, b64);
-        } else if (req.kind.equals("constructor" )) {
+                    }
 
-            // Build constructor args
-            List<Object> values = new ArrayList<>();
-            List<Class<?>> types = new ArrayList<>();
+                    private static Object isValidByString (Map < String, Object > body){
+                        String uuid = (String) body.get("uuid" );
+                        return UuidValidator.isValid(uuid);
+                        private static Object isValidByStringAndInt (Map < String, Object > body){
+                            String uuid = (String) body.get("uuid" );
+                            int version = (int) body.get("version" );
+                            return UuidValidator.isValid(uuid, version);
+                            private static Object isValidByUUID (Map < String, Object > body){
+                                UUID uuid = InstanceUtils.getInstance(body, "uuid" );
+                                return UuidValidator.isValid(uuid);
 
-            if (req.args != null) {
-                for (Arg a : req.args) {
-                    Object val = InstanceUtils.materializeArg(a);
-                    values.add(val);
-                    types.add(InstanceUtils.inferTypeForParam(a, val));
-                }
-            }
+                            }
 
-            // Pick constructor and instantiate
-            Constructor<?> ctor = InstanceUtils.resolveBestConstructor(aClass, types);
-            Object instance = ctor.newInstance(values.toArray());
 
-            // Encode instance -> JSON bytes via Gson; then Base64
-            byte[] bytes = GSON.toJson(instance).getBytes(StandardCharsets.UTF_8);
-            String b64 = Base64.getEncoder().encodeToString(bytes);
+                            private static Object instances (Object object){
+                                try {
+                                    CreateInstanceRequest req = (CreateInstanceRequest) object;
+                                    if (req.kind == null || req.kind.isBlank()) {
+                                        throw new RuntimeException("Request kind is required" );
+                                    }
 
-            return new CreateInstanceResponse(aClass.getName(), b64);
-        } else {
-            throw new RuntimeException("Invalid request kind " + req.kind);
-        }
+                                    Class<?> aClass = Class.forName(req.className);
 
-    } catch (Exception e) {
-        throw new RuntimeException("Error creating instance: " + e.getMessage(), e);
-    }
-}
+                                    if (req.kind.equals("factory" )) {
 
-@Override
-public void service(HttpRequest request, HttpResponse response) throws Exception {
-    String requestBody = request.getReader().lines()
-            .collect(Collectors.joining(System.lineSeparator()));
-    Map<String, Object> body = JACKSON.readValue(requestBody, new TypeReference<>() {
-    });
-    Object result = pathHandlers.get(request.getPath())
-            .apply(body);
-    sendResponse(response, result);
-}
+                                        // Build factory args (reuse your existing arg materialization)
+                                        List<Object> fValues = new ArrayList<>();
+                                        List<Class<?>> fTypes = new ArrayList<>();
+                                        if (req.args != null) {
+                                            for (Arg a : req.args) {
+                                                Object val = InstanceUtils.materializeArg(a);
+                                                fValues.add(val);
+                                                fTypes.add(InstanceUtils.inferTypeForParam(a, val));
+                                            }
+                                        }
 
-@Override
-public String getPath() {
-    return "/*";
-}
+                                        // Find & invoke static factory
+                                        Method m = InstanceUtils.resolveStaticFactory(aClass, req.name, fTypes);
+                                        Object instance = m.invoke(null, fValues.toArray());
 
-private void sendResponse(HttpResponse response, Object result)
+                                        byte[] bytes = GSON.toJson(instance).getBytes(java.nio.charset.StandardCharsets.UTF_8);
+                                        String b64 = Base64.getEncoder().encodeToString(bytes);
+                                        return new CreateInstanceResponse(req.className, b64);
+                                    } else if (req.kind.equals("constructor" )) {
+
+                                        // Build constructor args
+                                        List<Object> values = new ArrayList<>();
+                                        List<Class<?>> types = new ArrayList<>();
+
+                                        if (req.args != null) {
+                                            for (Arg a : req.args) {
+                                                Object val = InstanceUtils.materializeArg(a);
+                                                values.add(val);
+                                                types.add(InstanceUtils.inferTypeForParam(a, val));
+                                            }
+                                        }
+
+                                        // Pick constructor and instantiate
+                                        Constructor<?> ctor = InstanceUtils.resolveBestConstructor(aClass, types);
+                                        Object instance = ctor.newInstance(values.toArray());
+
+                                        // Encode instance -> JSON bytes via Gson; then Base64
+                                        byte[] bytes = GSON.toJson(instance).getBytes(StandardCharsets.UTF_8);
+                                        String b64 = Base64.getEncoder().encodeToString(bytes);
+
+                                        return new CreateInstanceResponse(aClass.getName(), b64);
+                                    } else {
+                                        throw new RuntimeException("Invalid request kind " + req.kind);
+                                    }
+
+                                } catch (Exception e) {
+                                    throw new RuntimeException("Error creating instance: " + e.getMessage(), e);
+                                }
+                            }
+
+                            @Override
+                            public void service (HttpRequest request, HttpResponse response) throws Exception {
+                                String requestBody = request.getReader().lines()
+                                        .collect(Collectors.joining(System.lineSeparator()));
+                                Map<String, Object> body = JACKSON.readValue(requestBody, new TypeReference<>() {
+                                });
+                                Object result = pathHandlers.get(request.getPath())
+                                        .apply(body);
+                                sendResponse(response, result);
+                            }
+
+                            @Override
+                            public String getPath () {
+                                return "/*";
+                            }
+
+                            private void sendResponse (HttpResponse response, Object result)
         throws IOException {
-    Map<String, Object> responseBody = new HashMap<>();
-    responseBody.put("result" , result);
-    response.setContentType("application/json" );
-    response.getWriter().write(JACKSON.writeValueAsString(responseBody));
-}
-}
+                                Map<String, Object> responseBody = new HashMap<>();
+                                responseBody.put("result" , result);
+                                response.setContentType("application/json" );
+                                response.getWriter().write(JACKSON.writeValueAsString(responseBody));
+                            }
+                        }
