@@ -106,10 +106,10 @@ public class Main extends Routable implements HttpFunction {
 
     @Override
     public void service(HttpRequest request, HttpResponse response) throws Exception {
-        String requestBody = request.getReader().lines().collect(Collectors.joining(System.lineSeparator()));
+        String requestBody = request.getReader().lines()
+                .collect(Collectors.joining(System.lineSeparator()));
         Map<String, Object> body = requestBody.isEmpty() ? new HashMap<>() : JACKSON.readValue(requestBody, new TypeReference<>() {
         });
-
         body.put("path", request.getPath());
         Object result = pathHandlers.get(request.getPath())
                 .apply(body);
