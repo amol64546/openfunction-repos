@@ -115,6 +115,12 @@ public class Main extends Routable implements HttpFunction {
             body = JACKSON.readValue(requestBody, new TypeReference<>() {
             });
         }
+        if (!pathHandlers.containsKey(request.getPath())) {
+            response.setStatusCode(404);
+            response.getWriter().write("Not Found");
+            return;
+        }
+        body.put("path", request.getPath());
         Object result = pathHandlers.get(request.getPath())
                 .apply(body);
         sendResponse(response, result);

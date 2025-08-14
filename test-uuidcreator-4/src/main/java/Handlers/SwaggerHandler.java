@@ -22,13 +22,33 @@ public class SwaggerHandler {
     // Handler for /swagger-ui
     public static Object swaggerUIHandler(Map<String, Object> body) {
         try {
-            String filePath = "src/main/resources/swagger-ui"; // Adjust as needed
+            String requestPath = (String) body.get("path"); // Assuming body contains the request path
+            String filePath = "src/main/resources/swagger-ui" + requestPath;
+            // Determine the content type based on file extension
+            String contentType = getContentType(filePath);
+
             byte[] fileContent = Files.readAllBytes(Paths.get(filePath));
-            return new StaticFileResponse(fileContent, "text/html");
+            return new StaticFileResponse(fileContent, contentType);
         } catch (IOException e) {
             Map<String, Object> error = new HashMap<>();
             error.put("error", "File not found");
             return error;
+        }
+    }
+
+    private static String getContentType(String filePath) {
+        if (filePath.endsWith(".html")) {
+            return "text/html";
+        } else if (filePath.endsWith(".css")) {
+            return "text/css";
+        } else if (filePath.endsWith(".js")) {
+            return "application/javascript";
+        } else if (filePath.endsWith(".json")) {
+            return "application/json";
+        } else if (filePath.endsWith(".map")) {
+            return "application/json"; // For source maps
+        } else {
+            return "application/octet-stream"; // Default binary content type
         }
     }
 
