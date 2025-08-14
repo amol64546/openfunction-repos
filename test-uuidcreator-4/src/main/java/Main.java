@@ -1,3 +1,4 @@
+import Handlers.SwaggerHandler;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.f4b6a3.uuid.UuidCreator;
@@ -26,9 +27,11 @@ public class Main extends Routable implements HttpFunction {
     private static final Map<String, Function<Map<String, Object>, Object>> pathHandlers = new HashMap<>();
 
     static {
-        pathHandlers.put("/instances" , Main::instances);
-        pathHandlers.put("/getTimeBased" , Main::getTimeBased);
-        pathHandlers.put("/getRandomBased" , Main::getRandomBased);
+        pathHandlers.put("/swagger-ui", SwaggerHandler::swaggerUIHandler);
+        pathHandlers.put("/swagger.json", SwaggerHandler::swaggerJsonHandler);
+        pathHandlers.put("/instances", Main::instances);
+        pathHandlers.put("/getTimeBased", Main::getTimeBased);
+        pathHandlers.put("/getRandomBased", Main::getRandomBased);
     }
 
     private static Object getTimeBased(Map<String, Object> body) {
@@ -44,12 +47,12 @@ public class Main extends Routable implements HttpFunction {
         try {
             CreateInstanceRequest req = JACKSON.convertValue(object, CreateInstanceRequest.class);
             if (req.kind == null || req.kind.isBlank()) {
-                throw new RuntimeException("Request kind is required" );
+                throw new RuntimeException("Request kind is required");
             }
 
             Class<?> aClass = Class.forName(req.className);
 
-            if (req.kind.equals("factory" )) {
+            if (req.kind.equals("factory")) {
 
                 // Build factory args (reuse your existing arg materialization)
                 List<Object> fValues = new ArrayList<>();
@@ -69,7 +72,7 @@ public class Main extends Routable implements HttpFunction {
                 byte[] bytes = GSON.toJson(instance).getBytes(java.nio.charset.StandardCharsets.UTF_8);
                 String b64 = Base64.getEncoder().encodeToString(bytes);
                 return new CreateInstanceResponse(req.className, b64);
-            } else if (req.kind.equals("constructor" )) {
+            } else if (req.kind.equals("constructor")) {
 
                 // Build constructor args
                 List<Object> values = new ArrayList<>();
@@ -122,11 +125,18 @@ public class Main extends Routable implements HttpFunction {
         return "/*";
     }
 
-    private void sendResponse(HttpResponse response, Object result)
-            throws IOException {
+private void sendResponse(HttpResponse response, Object result) throws IOException {
+    if (result instanceof SwaggerHandler.StaticFileResponse) {
+        SwaggerHandler.StaticFileResponse sfr = (SwaggerHandler.StaticFileResponse) result;
+        response.setContentType(sfr.contentType);
+        response.getOutputStream().write(sfr.content);
+    } else {
         Map<String, Object> responseBody = new HashMap<>();
-        responseBody.put("result" , result);
-        response.setContentType("application/json" );
+        responseBody.put("result", result);
+        response.setContentType("application/json");
         response.getWriter().write(JACKSON.writeValueAsString(responseBody));
     }
+}
+
+
 }
