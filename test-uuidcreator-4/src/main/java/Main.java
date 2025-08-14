@@ -108,18 +108,8 @@ public class Main extends Routable implements HttpFunction {
     public void service(HttpRequest request, HttpResponse response) throws Exception {
         String requestBody = request.getReader().lines()
                 .collect(Collectors.joining(System.lineSeparator()));
-        Map<String, Object> body;
-        if (requestBody.isEmpty()) {
-            body = new HashMap<>();
-        } else {
-            body = JACKSON.readValue(requestBody, new TypeReference<>() {
-            });
-        }
-        if (!pathHandlers.containsKey(request.getPath())) {
-            response.setStatusCode(404);
-            response.getWriter().write("Not Found");
-            return;
-        }
+        Map<String, Object> body = requestBody.isEmpty() ? new HashMap<>() : JACKSON.readValue(requestBody, new TypeReference<>() {
+        });
         body.put("path", request.getPath());
         Object result = pathHandlers.get(request.getPath())
                 .apply(body);
