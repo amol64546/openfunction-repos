@@ -22,7 +22,7 @@ public class SwaggerHandler {
     // Handler for /swagger-ui
     public static Object swaggerUIHandler(Map<String, Object> body) {
         try {
-            String filePath = "resources/swagger-ui/index.html"; // Adjust as needed
+            String filePath = "src/main/resources/swagger-ui"; // Adjust as needed
             byte[] fileContent = Files.readAllBytes(Paths.get(filePath));
             return new StaticFileResponse(fileContent, "text/html");
         } catch (IOException e) {

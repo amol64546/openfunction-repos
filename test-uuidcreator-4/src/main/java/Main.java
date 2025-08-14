@@ -125,18 +125,18 @@ public class Main extends Routable implements HttpFunction {
         return "/*";
     }
 
-private void sendResponse(HttpResponse response, Object result) throws IOException {
-    if (result instanceof SwaggerHandler.StaticFileResponse) {
-        SwaggerHandler.StaticFileResponse sfr = (SwaggerHandler.StaticFileResponse) result;
-        response.setContentType(sfr.contentType);
-        response.getOutputStream().write(sfr.content);
-    } else {
-        Map<String, Object> responseBody = new HashMap<>();
-        responseBody.put("result", result);
-        response.setContentType("application/json");
-        response.getWriter().write(JACKSON.writeValueAsString(responseBody));
+    private void sendResponse(HttpResponse response, Object result) throws IOException {
+        if (result instanceof SwaggerHandler.StaticFileResponse) {
+            SwaggerHandler.StaticFileResponse sfr = (SwaggerHandler.StaticFileResponse) result;
+            response.setContentType(sfr.contentType);
+            response.getOutputStream().write(sfr.content);
+        } else {
+            Map<String, Object> responseBody = new HashMap<>();
+            responseBody.put("result", result);
+            response.setContentType("application/json");
+            response.getWriter().write(JACKSON.writeValueAsString(responseBody));
+        }
     }
-}
 
 
 }
