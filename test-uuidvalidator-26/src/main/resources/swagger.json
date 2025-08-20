@@ -1,0 +1,198 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Instances API",
+    "version": "1.0.0"
+  },
+  "paths": {
+    "/url": {
+      "get": {
+        "description": "New endpoint",
+        "responses": {
+          "200": {
+            "description": "New response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "": ""
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/instances": {
+      "post": {
+        "summary": "Create an instance",
+        "description": "Creates an instance based on the provided constructor or factory definition.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "oneOf": [
+                  {
+                    "type": "object",
+                    "properties": {
+                      "kind": {
+                        "type": "string",
+                        "enum": [
+                          "constructor"
+                        ]
+                      },
+                      "className": {
+                        "type": "string"
+                      },
+                      "args": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "kind": {
+                              "type": "string"
+                            },
+                            "className": {
+                              "type": "string"
+                            },
+                            "base64": {
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "kind"
+                          ]
+                        }
+                      }
+                    },
+                    "required": [
+                      "kind",
+                      "className"
+                    ]
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "kind": {
+                        "type": "string",
+                        "enum": [
+                          "factory"
+                        ]
+                      },
+                      "className": {
+                        "type": "string"
+                      },
+                      "name": {
+                        "type": "string"
+                      },
+                      "args": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "kind": {
+                              "type": "string"
+                            },
+                            "value": {
+                              "type": "string"
+                            },
+                            "type": {
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "kind"
+                          ]
+                        }
+                      }
+                    },
+                    "required": [
+                      "kind",
+                      "className"
+                    ]
+                  }
+                ]
+              },
+              "examples": {
+                "constructorWithObject": {
+                  "value": {
+                    "kind": "constructor",
+                    "className": "com.github.f4b6a3.uuid.codec.base.function.Base16Decoder",
+                    "args": [
+                      {
+                        "kind": "object",
+                        "className": "com.github.f4b6a3.uuid.codec.base.BaseN",
+                        "base64": "eyJyYWRpeCI6MTYsImxlbmd0aCI6MzIsInBhZGRpbmciOiIwIiwic2Vuc2l0aXZlIjpmYWxzZSwiYWxwaGFiZXQiOnsiYXJyYXkiOlsiMCIsIjEiLCIyIiwiMyIsIjQiLCI1IiwiNiIsIjciLCI4IiwiOSIsImEiLCJiIiwiYyIsImQiLCJlIiwiZiJdfSwibWFwIjp7ImFycmF5IjpbLTEsLTEsLTEsLTEsLTEsLTEsLTEsLTEsLTEsLTEsLTEsLTEsLTEsLTEsLTEsLTEsLTEsLTEsLTEsLTEsLTEsLTEsLTEsLTEsLTEsLTEsLTEsLTEsLTEsLTEsLTEsLTEsLTEsLTEsLTEsLTEsLTEsLTEsLTEsLTEsLTEsLTEsLTEsLTEsLTEsLTEsLTEsLTEsMCwxLDIsMyw0LDUsNiw3LDgsOSwtMSwtMSwtMSwtMSwtMSwtMSwtMSwxMCwxMSwxMiwxMywxNCwxNSwtMSwtMSwtMSwtMSwtMSwtMSwtMSwtMSwtMSwtMSwtMSwtMSwtMSwtMSwtMSwtMSwtMSwtMSwtMSwtMSwtMSwtMSwtMSwtMSwtMSwtMSwtMSwtMSwtMSwtMSwtMSwtMV19fQ=="
+                      }
+                    ]
+                  }
+                },
+                "factoryWithStringArg": {
+                  "value": {
+                    "kind": "factory",
+                    "className": "java.util.UUID",
+                    "name": "fromString",
+                    "args": [
+                      {
+                        "kind": "string",
+                        "value": "123e4567-e89b-12d3-a456-426655440002"
+                      }
+                    ]
+                  }
+                },
+                "factoryNoArgs": {
+                  "value": {
+                    "kind": "factory",
+                    "className": "com.github.f4b6a3.uuid.util.UuidComparator",
+                    "name": "getDefaultInstance"
+                  }
+                },
+                "constructorWithPrimitive": {
+                  "value": {
+                    "kind": "constructor",
+                    "className": "com.github.f4b6a3.uuid.codec.base.BaseN",
+                    "args": [
+                      {
+                        "kind": "primitive",
+                        "type": "int",
+                        "value": "16"
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Instance created successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "className": {
+                      "type": "string"
+                    },
+                    "base64": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "className",
+                    "base64"
+                  ]
+                },
+                "example": {
+                  "className": "java.util.UUID",
+                  "base64": "IjEyM2U0NTY3LWU4OWItMTJkMy1hNDU2LTQyNjY1NTQ0MDAwMiI="
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
