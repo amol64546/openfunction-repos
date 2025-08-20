@@ -2,15 +2,22 @@
   "openapi" : "3.0.1",
   "info" : {
     "title" : "com.github.f4b6a3:uuid-creator:6.1.1",
-    "version" : "1.0.0",
-    "description" : "A Java library to generate RFC-4122 Universally Unique Identifiers (UUID)."
+    "description" : "A Java library to generate RFC-4122 Universally Unique Identifiers (UUID).",
+    "version" : "1.0.0"
   },
+  "tags" : [ {
+    "name" : "UuidValidator",
+    "description" : "Utility for UUID validation.\n <p>\n Using it is much faster than using on regular expression.\n <p>\n Examples of valid string formats:\n <ul>\n <li><code>12345678-abcd-abcd-abcd-123456789abcd</code> (36 hexadecimal chars,\n lower case and with hyphen)\n <li><code>12345678-ABCD-ABCD-ABCD-123456789ABCD</code> (36 hexadecimal chars,\n UPPER CASE and with hyphen)\n <li><code>12345678abcdabcdabcd123456789abcd</code> (32 hexadecimal chars,\n lower case and WITHOUT hyphen)\n <li><code>12345678ABCDABCDABCD123456789ABCD</code> (32 hexadecimal chars,\n UPPER CASE and WITHOUT hyphen)\n </ul>"
+  }, {
+    "name" : "Instance-Creator",
+    "description" : "Utility for creating instances of classes using constructors or factory methods."
+  } ],
   "paths" : {
     "/isValid/by-string" : {
       "post" : {
-        "description" : "isValid(String uuid)",
-        "summary" : "Checks if the UUID string is valid.",
         "tags" : [ "UuidValidator" ],
+        "summary" : "Checks if the UUID string is valid.",
+        "description" : "isValid(String uuid)",
         "responses" : {
           "200" : {
             "description" : "OK",
@@ -19,11 +26,10 @@
                 "schema" : {
                   "type" : "object",
                   "properties" : { },
-                  "required" : [ "result" ]
+                  "exampleSetFlag" : false
                 },
-                "example" : {
-                  "result" : null
-                }
+                "example" : { },
+                "exampleSetFlag" : true
               }
             }
           }
@@ -32,9 +38,9 @@
     },
     "/isValid/by-string-int" : {
       "post" : {
-        "description" : "isValid(String uuid, int version)",
-        "summary" : "Checks if the UUID string is valid.",
         "tags" : [ "UuidValidator" ],
+        "summary" : "Checks if the UUID string is valid.",
+        "description" : "isValid(String uuid, int version)",
         "responses" : {
           "200" : {
             "description" : "OK",
@@ -43,11 +49,10 @@
                 "schema" : {
                   "type" : "object",
                   "properties" : { },
-                  "required" : [ "result" ]
+                  "exampleSetFlag" : false
                 },
-                "example" : {
-                  "result" : null
-                }
+                "example" : { },
+                "exampleSetFlag" : true
               }
             }
           }
@@ -56,9 +61,9 @@
     },
     "/isValid/by-uuid" : {
       "post" : {
-        "description" : "isValid(java.util.UUID uuid)",
-        "summary" : "Checks if the UUID is valid.",
         "tags" : [ "UuidValidator" ],
+        "summary" : "Checks if the UUID is valid.",
+        "description" : "isValid(java.util.UUID uuid)",
         "responses" : {
           "200" : {
             "description" : "OK",
@@ -67,20 +72,189 @@
                 "schema" : {
                   "type" : "object",
                   "properties" : { },
-                  "required" : [ "result" ]
+                  "exampleSetFlag" : false
+                },
+                "example" : { },
+                "exampleSetFlag" : true
+              }
+            }
+          }
+        }
+      }
+    },
+    "/instances" : {
+      "post" : {
+        "tags" : [ "Instance-Creator" ],
+        "summary" : "Create an instance",
+        "description" : "Creates an instance based on the provided constructor or factory definition.",
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "exampleSetFlag" : false,
+                "oneOf" : [ {
+                  "required" : [ "className", "kind" ],
+                  "type" : "object",
+                  "properties" : {
+                    "kind" : {
+                      "type" : "string",
+                      "exampleSetFlag" : false,
+                      "enum" : [ "constructor" ]
+                    },
+                    "className" : {
+                      "type" : "string",
+                      "exampleSetFlag" : false
+                    },
+                    "args" : {
+                      "type" : "array",
+                      "exampleSetFlag" : false,
+                      "items" : {
+                        "required" : [ "kind" ],
+                        "type" : "object",
+                        "properties" : {
+                          "kind" : {
+                            "type" : "string",
+                            "exampleSetFlag" : false
+                          },
+                          "className" : {
+                            "type" : "string",
+                            "exampleSetFlag" : false
+                          },
+                          "base64" : {
+                            "type" : "string",
+                            "exampleSetFlag" : false
+                          }
+                        },
+                        "exampleSetFlag" : false
+                      }
+                    }
+                  },
+                  "exampleSetFlag" : false
+                }, {
+                  "required" : [ "className", "kind" ],
+                  "type" : "object",
+                  "properties" : {
+                    "kind" : {
+                      "type" : "string",
+                      "exampleSetFlag" : false,
+                      "enum" : [ "factory" ]
+                    },
+                    "className" : {
+                      "type" : "string",
+                      "exampleSetFlag" : false
+                    },
+                    "name" : {
+                      "type" : "string",
+                      "exampleSetFlag" : false
+                    },
+                    "args" : {
+                      "type" : "array",
+                      "exampleSetFlag" : false,
+                      "items" : {
+                        "required" : [ "kind" ],
+                        "type" : "object",
+                        "properties" : {
+                          "kind" : {
+                            "type" : "string",
+                            "exampleSetFlag" : false
+                          },
+                          "value" : {
+                            "type" : "string",
+                            "exampleSetFlag" : false
+                          },
+                          "type" : {
+                            "type" : "string",
+                            "exampleSetFlag" : false
+                          }
+                        },
+                        "exampleSetFlag" : false
+                      }
+                    }
+                  },
+                  "exampleSetFlag" : false
+                } ]
+              },
+              "examples" : {
+                "constructorWithObject" : {
+                  "value" : {
+                    "kind" : "constructor",
+                    "className" : "com.github.f4b6a3.uuid.codec.base.function.Base16Decoder",
+                    "args" : [ {
+                      "kind" : "object",
+                      "className" : "com.github.f4b6a3.uuid.codec.base.BaseN",
+                      "base64" : "eyJyYWRpeCI6MTYsImxlbmd0aCI6MzIsInBhZGRpbmciOiIwIiwic2Vuc2l0aXZlIjpmYWxzZSwiYWxwaGFiZXQiOnsiYXJyYXkiOlsiMCIsIjEiLCIyIiwiMyIsIjQiLCI1IiwiNiIsIjciLCI4IiwiOSIsImEiLCJiIiwiYyIsImQiLCJlIiwiZiJdfSwibWFwIjp7ImFycmF5IjpbLTEsLTEsLTEsLTEsLTEsLTEsLTEsLTEsLTEsLTEsLTEsLTEsLTEsLTEsLTEsLTEsLTEsLTEsLTEsLTEsLTEsLTEsLTEsLTEsLTEsLTEsLTEsLTEsLTEsLTEsLTEsLTEsLTEsLTEsLTEsLTEsLTEsLTEsLTEsLTEsLTEsLTEsLTEsLTEsLTEsLTEsLTEsLTEsMCwxLDIsMyw0LDUsNiw3LDgsOSwtMSwtMSwtMSwtMSwtMSwtMSwtMSwxMCwxMSwxMiwxMywxNCwxNSwtMSwtMSwtMSwtMSwtMSwtMSwtMSwtMSwtMSwtMSwtMSwtMSwtMSwtMSwtMSwtMSwtMSwtMSwtMSwtMSwtMSwtMSwtMSwtMSwtMSwtMSwtMSwtMSwtMSwtMSwtMSwtMV19fQ=="
+                    } ]
+                  },
+                  "valueSetFlag" : true
+                },
+                "factoryWithStringArg" : {
+                  "value" : {
+                    "kind" : "factory",
+                    "className" : "java.util.UUID",
+                    "name" : "fromString",
+                    "args" : [ {
+                      "kind" : "string",
+                      "value" : "123e4567-e89b-12d3-a456-426655440002"
+                    } ]
+                  },
+                  "valueSetFlag" : true
+                },
+                "factoryNoArgs" : {
+                  "value" : {
+                    "kind" : "factory",
+                    "className" : "com.github.f4b6a3.uuid.util.UuidComparator",
+                    "name" : "getDefaultInstance"
+                  },
+                  "valueSetFlag" : true
+                },
+                "constructorWithPrimitive" : {
+                  "value" : {
+                    "kind" : "constructor",
+                    "className" : "com.github.f4b6a3.uuid.codec.base.BaseN",
+                    "args" : [ {
+                      "kind" : "primitive",
+                      "type" : "int",
+                      "value" : "16"
+                    } ]
+                  },
+                  "valueSetFlag" : true
+                }
+              },
+              "exampleSetFlag" : false
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Instance created successfully",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "required" : [ "base64", "className" ],
+                  "type" : "object",
+                  "properties" : {
+                    "className" : {
+                      "type" : "string",
+                      "exampleSetFlag" : false
+                    },
+                    "base64" : {
+                      "type" : "string",
+                      "exampleSetFlag" : false
+                    }
+                  },
+                  "exampleSetFlag" : false
                 },
                 "example" : {
-                  "result" : null
-                }
+                  "className" : "java.util.UUID",
+                  "base64" : "IjEyM2U0NTY3LWU4OWItMTJkMy1hNDU2LTQyNjY1NTQ0MDAwMiI="
+                },
+                "exampleSetFlag" : true
               }
             }
           }
         }
       }
     }
-  },
-  "tags" : [ {
-    "name" : "UuidValidator",
-    "description" : "Utility for UUID validation.\n <p>\n Using it is much faster than using on regular expression.\n <p>\n Examples of valid string formats:\n <ul>\n <li><code>12345678-abcd-abcd-abcd-123456789abcd</code> (36 hexadecimal chars,\n lower case and with hyphen)\n <li><code>12345678-ABCD-ABCD-ABCD-123456789ABCD</code> (36 hexadecimal chars,\n UPPER CASE and with hyphen)\n <li><code>12345678abcdabcdabcd123456789abcd</code> (32 hexadecimal chars,\n lower case and WITHOUT hyphen)\n <li><code>12345678ABCDABCDABCD123456789ABCD</code> (32 hexadecimal chars,\n UPPER CASE and WITHOUT hyphen)\n </ul>"
-  } ]
+  }
 }

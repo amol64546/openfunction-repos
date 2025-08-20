@@ -1,0 +1,86 @@
+{
+  "openapi" : "3.0.1",
+  "info" : {
+    "title" : "com.github.f4b6a3:uuid-creator:6.1.1",
+    "version" : "1.0.0",
+    "description" : "A Java library to generate RFC-4122 Universally Unique Identifiers (UUID)."
+  },
+  "paths" : {
+    "/isValid/by-string" : {
+      "post" : {
+        "description" : "isValid(String uuid)",
+        "summary" : "Checks if the UUID string is valid.",
+        "tags" : [ "UuidValidator" ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "object",
+                  "properties" : { },
+                  "required" : [ "result" ]
+                },
+                "example" : {
+                  "result" : null
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/isValid/by-string-int" : {
+      "post" : {
+        "description" : "isValid(String uuid, int version)",
+        "summary" : "Checks if the UUID string is valid.",
+        "tags" : [ "UuidValidator" ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "object",
+                  "properties" : { },
+                  "required" : [ "result" ]
+                },
+                "example" : {
+                  "result" : null
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/isValid/by-uuid" : {
+      "post" : {
+        "description" : "isValid(java.util.UUID uuid)",
+        "summary" : "Checks if the UUID is valid.",
+        "tags" : [ "UuidValidator" ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "object",
+                  "properties" : { },
+                  "required" : [ "result" ]
+                },
+                "example" : {
+                  "result" : null
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "tags" : [ {
+    "name" : "UuidValidator",
+    "description" : "Utility for UUID validation.\n <p>\n Using it is much faster than using on regular expression.\n <p>\n Examples of valid string formats:\n <ul>\n <li><code>12345678-abcd-abcd-abcd-123456789abcd</code> (36 hexadecimal chars,\n lower case and with hyphen)\n <li><code>12345678-ABCD-ABCD-ABCD-123456789ABCD</code> (36 hexadecimal chars,\n UPPER CASE and with hyphen)\n <li><code>12345678abcdabcdabcd123456789abcd</code> (32 hexadecimal chars,\n lower case and WITHOUT hyphen)\n <li><code>12345678ABCDABCDABCD123456789ABCD</code> (32 hexadecimal chars,\n UPPER CASE and WITHOUT hyphen)\n </ul>"
+  } ]
+}
