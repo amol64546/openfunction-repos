@@ -1,0 +1,523 @@
+{
+  "openapi" : "3.0.1",
+  "info" : {
+    "title" : "com.github.f4b6a3:uuid-creator:6.1.1",
+    "description" : "A Java library to generate RFC-4122 Universally Unique Identifiers (UUID).",
+    "version" : "1.0.0"
+  },
+  "tags" : [ {
+    "name" : "UuidComparator",
+    "description" : "Comparator for UUIDs.\n <p>\n The default static method compares two time-based UUIDs by comparing the time\n stamps first and then comparing the least significant bits as unsigned 64-bit\n integers. If both UUIDs are not time-based then it compares them as unsigned\n 128-bit integers.\n <p>\n The opaque static method compares two UUIDs as unsigned 128-bit integers.\n It's the same as lexicographic sorting of UUID canonical strings."
+  }, {
+    "name" : "Instance-Creator",
+    "description" : "Utility for creating instances of classes using constructors or factory methods."
+  } ],
+  "paths" : {
+    "/compare" : {
+      "post" : {
+        "tags" : [ "UuidComparator" ],
+        "summary" : "Compares two UUIDs.",
+        "description" : "compare(java.util.UUID uuid1, java.util.UUID uuid2)",
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "required" : [ "params" ],
+                "type" : "object",
+                "properties" : {
+                  "params" : {
+                    "type" : "object",
+                    "properties" : {
+                      "uuid1" : {
+                        "required" : [ "base64", "className", "kind" ],
+                        "type" : "object",
+                        "properties" : {
+                          "kind" : {
+                            "type" : "string",
+                            "exampleSetFlag" : false,
+                            "enum" : [ "object" ]
+                          },
+                          "className" : {
+                            "type" : "string",
+                            "exampleSetFlag" : false
+                          },
+                          "base64" : {
+                            "type" : "string",
+                            "format" : "byte",
+                            "exampleSetFlag" : false
+                          }
+                        },
+                        "exampleSetFlag" : false
+                      },
+                      "uuid2" : {
+                        "required" : [ "base64", "className", "kind" ],
+                        "type" : "object",
+                        "properties" : {
+                          "kind" : {
+                            "type" : "string",
+                            "exampleSetFlag" : false,
+                            "enum" : [ "object" ]
+                          },
+                          "className" : {
+                            "type" : "string",
+                            "exampleSetFlag" : false
+                          },
+                          "base64" : {
+                            "type" : "string",
+                            "format" : "byte",
+                            "exampleSetFlag" : false
+                          }
+                        },
+                        "exampleSetFlag" : false
+                      }
+                    },
+                    "exampleSetFlag" : false
+                  }
+                },
+                "exampleSetFlag" : false
+              },
+              "example" : {
+                "params" : {
+                  "uuid1" : {
+                    "kind" : "object",
+                    "className" : "java.util.UUID",
+                    "base64" : "MjNkMGRjNGYtNTYyZS00Njk5LThkZjctODJjZjAyMDE1YzY2"
+                  },
+                  "uuid2" : {
+                    "kind" : "object",
+                    "className" : "java.util.UUID",
+                    "base64" : "ZTM2YTZjZmMtY2Y3Zi00M2I3LWI5MzUtOGYzMmI5ZjI0MDI1"
+                  }
+                }
+              },
+              "exampleSetFlag" : true
+            }
+          }
+        },
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "required" : [ "result" ],
+                  "type" : "object",
+                  "properties" : {
+                    "result" : {
+                      "type" : "integer",
+                      "format" : "int32",
+                      "exampleSetFlag" : false
+                    }
+                  },
+                  "exampleSetFlag" : false
+                },
+                "example" : {
+                  "result" : 123
+                },
+                "exampleSetFlag" : true
+              }
+            }
+          }
+        }
+      }
+    },
+    "/opaqueCompare" : {
+      "post" : {
+        "tags" : [ "UuidComparator" ],
+        "summary" : "Compares two UUIDs.\n <p>\n The opaque static method compares two UUIDs as unsigned 128-bit integers.\n It's the same as lexicographic sorting of UUID canonical strings.\n <p>\n The first of two UUIDs is greater than the second if the most significant\n byte in which they differ is greater for the first UUID.\n <p>\n The opaque method is faster than the default method as it does not check the\n UUID version.\n <p>\n It's referred to as \"opaque\" just because it works like a \"blind byte-to-byte\n comparison\".\n <p>\n It can be useful for these reasons:\n <ol>\n <li>{@link UUID#compareTo(UUID)} can lead to unexpected behavior due to\n signed {@code long} comparison;\n <li>{@link UUID#compareTo(UUID)} throws {@link NullPointerException} if a\n {@code null} UUID is given.\n </ol>",
+        "description" : "opaqueCompare(java.util.UUID uuid1, java.util.UUID uuid2)",
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "required" : [ "params" ],
+                "type" : "object",
+                "properties" : {
+                  "params" : {
+                    "type" : "object",
+                    "properties" : {
+                      "uuid1" : {
+                        "required" : [ "base64", "className", "kind" ],
+                        "type" : "object",
+                        "properties" : {
+                          "kind" : {
+                            "type" : "string",
+                            "exampleSetFlag" : false,
+                            "enum" : [ "object" ]
+                          },
+                          "className" : {
+                            "type" : "string",
+                            "exampleSetFlag" : false
+                          },
+                          "base64" : {
+                            "type" : "string",
+                            "format" : "byte",
+                            "exampleSetFlag" : false
+                          }
+                        },
+                        "exampleSetFlag" : false
+                      },
+                      "uuid2" : {
+                        "required" : [ "base64", "className", "kind" ],
+                        "type" : "object",
+                        "properties" : {
+                          "kind" : {
+                            "type" : "string",
+                            "exampleSetFlag" : false,
+                            "enum" : [ "object" ]
+                          },
+                          "className" : {
+                            "type" : "string",
+                            "exampleSetFlag" : false
+                          },
+                          "base64" : {
+                            "type" : "string",
+                            "format" : "byte",
+                            "exampleSetFlag" : false
+                          }
+                        },
+                        "exampleSetFlag" : false
+                      }
+                    },
+                    "exampleSetFlag" : false
+                  }
+                },
+                "exampleSetFlag" : false
+              },
+              "example" : {
+                "params" : {
+                  "uuid1" : {
+                    "kind" : "object",
+                    "className" : "java.util.UUID",
+                    "base64" : "YjVlMzE0NDQtODlkNS00MzZjLTk4YTAtYTk4MjVlOTlkZTdm"
+                  },
+                  "uuid2" : {
+                    "kind" : "object",
+                    "className" : "java.util.UUID",
+                    "base64" : "OGZlNDVmMTMtMGZmYS00NDI2LWIwYmQtNjEzOWUzMDdjMWUz"
+                  }
+                }
+              },
+              "exampleSetFlag" : true
+            }
+          }
+        },
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "required" : [ "result" ],
+                  "type" : "object",
+                  "properties" : {
+                    "result" : {
+                      "type" : "integer",
+                      "format" : "int32",
+                      "exampleSetFlag" : false
+                    }
+                  },
+                  "exampleSetFlag" : false
+                },
+                "example" : {
+                  "result" : 123
+                },
+                "exampleSetFlag" : true
+              }
+            }
+          }
+        }
+      }
+    },
+    "/defaultCompare" : {
+      "post" : {
+        "tags" : [ "UuidComparator" ],
+        "summary" : "Compares two UUIDs.\n <p>\n The default static method compares two time-based UUIDs by comparing the time\n stamps first and then comparing the least significant bits as unsigned 64-bit\n integers. If both UUIDs are not time-based then it compares them as unsigned\n 128-bit integers.\n <p>\n The first of two UUIDs is greater than the second if the time stamp is\n greater for the first UUID. If the time stamps are equal, the first of two\n UUIDs is greater than the second if the most significant byte in which they\n differ is greater for the first UUID.\n <p>\n It can be useful for these reasons:\n <ol>\n <li>{@link UUID#compareTo(UUID)} doesn't work well for time-based UUIDs;\n <li>{@link UUID#compareTo(UUID)} can lead to unexpected behavior due to\n signed {@code long} comparison;\n <li>{@link UUID#compareTo(UUID)} throws {@link NullPointerException} if a\n {@code null} UUID is given.\n </ol>",
+        "description" : "defaultCompare(java.util.UUID uuid1, java.util.UUID uuid2)",
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "required" : [ "params" ],
+                "type" : "object",
+                "properties" : {
+                  "params" : {
+                    "type" : "object",
+                    "properties" : {
+                      "uuid1" : {
+                        "required" : [ "base64", "className", "kind" ],
+                        "type" : "object",
+                        "properties" : {
+                          "kind" : {
+                            "type" : "string",
+                            "exampleSetFlag" : false,
+                            "enum" : [ "object" ]
+                          },
+                          "className" : {
+                            "type" : "string",
+                            "exampleSetFlag" : false
+                          },
+                          "base64" : {
+                            "type" : "string",
+                            "format" : "byte",
+                            "exampleSetFlag" : false
+                          }
+                        },
+                        "exampleSetFlag" : false
+                      },
+                      "uuid2" : {
+                        "required" : [ "base64", "className", "kind" ],
+                        "type" : "object",
+                        "properties" : {
+                          "kind" : {
+                            "type" : "string",
+                            "exampleSetFlag" : false,
+                            "enum" : [ "object" ]
+                          },
+                          "className" : {
+                            "type" : "string",
+                            "exampleSetFlag" : false
+                          },
+                          "base64" : {
+                            "type" : "string",
+                            "format" : "byte",
+                            "exampleSetFlag" : false
+                          }
+                        },
+                        "exampleSetFlag" : false
+                      }
+                    },
+                    "exampleSetFlag" : false
+                  }
+                },
+                "exampleSetFlag" : false
+              },
+              "example" : {
+                "params" : {
+                  "uuid1" : {
+                    "kind" : "object",
+                    "className" : "java.util.UUID",
+                    "base64" : "MDMwN2JiNWUtODc1Mi00N2I0LWExZmYtNzNiNDM4YmRkY2Fk"
+                  },
+                  "uuid2" : {
+                    "kind" : "object",
+                    "className" : "java.util.UUID",
+                    "base64" : "ZGU3ZDJkNmMtMWNjMy00YTQ3LThhZmEtYThlN2U3MGExZTJm"
+                  }
+                }
+              },
+              "exampleSetFlag" : true
+            }
+          }
+        },
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "required" : [ "result" ],
+                  "type" : "object",
+                  "properties" : {
+                    "result" : {
+                      "type" : "integer",
+                      "format" : "int32",
+                      "exampleSetFlag" : false
+                    }
+                  },
+                  "exampleSetFlag" : false
+                },
+                "example" : {
+                  "result" : 123
+                },
+                "exampleSetFlag" : true
+              }
+            }
+          }
+        }
+      }
+    },
+    "/instances" : {
+      "post" : {
+        "tags" : [ "Instance-Creator" ],
+        "summary" : "Create an instance",
+        "description" : "Creates an instance based on the provided constructor or factory definition.",
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "type" : "array",
+                "exampleSetFlag" : false,
+                "items" : {
+                  "exampleSetFlag" : false,
+                  "oneOf" : [ {
+                    "required" : [ "className", "kind" ],
+                    "type" : "object",
+                    "properties" : {
+                      "kind" : {
+                        "type" : "string",
+                        "exampleSetFlag" : false,
+                        "enum" : [ "constructor" ]
+                      },
+                      "className" : {
+                        "type" : "string",
+                        "exampleSetFlag" : false
+                      },
+                      "args" : {
+                        "type" : "array",
+                        "exampleSetFlag" : false,
+                        "items" : {
+                          "required" : [ "kind" ],
+                          "type" : "object",
+                          "properties" : {
+                            "kind" : {
+                              "type" : "string",
+                              "exampleSetFlag" : false
+                            },
+                            "className" : {
+                              "type" : "string",
+                              "exampleSetFlag" : false
+                            },
+                            "base64" : {
+                              "type" : "string",
+                              "exampleSetFlag" : false
+                            }
+                          },
+                          "exampleSetFlag" : false
+                        }
+                      }
+                    },
+                    "exampleSetFlag" : false
+                  }, {
+                    "required" : [ "className", "kind" ],
+                    "type" : "object",
+                    "properties" : {
+                      "kind" : {
+                        "type" : "string",
+                        "exampleSetFlag" : false,
+                        "enum" : [ "factory" ]
+                      },
+                      "className" : {
+                        "type" : "string",
+                        "exampleSetFlag" : false
+                      },
+                      "name" : {
+                        "type" : "string",
+                        "exampleSetFlag" : false
+                      },
+                      "args" : {
+                        "type" : "array",
+                        "exampleSetFlag" : false,
+                        "items" : {
+                          "required" : [ "kind" ],
+                          "type" : "object",
+                          "properties" : {
+                            "kind" : {
+                              "type" : "string",
+                              "exampleSetFlag" : false
+                            },
+                            "value" : {
+                              "type" : "string",
+                              "exampleSetFlag" : false
+                            },
+                            "type" : {
+                              "type" : "string",
+                              "exampleSetFlag" : false
+                            }
+                          },
+                          "exampleSetFlag" : false
+                        }
+                      }
+                    },
+                    "exampleSetFlag" : false
+                  } ]
+                }
+              },
+              "examples" : {
+                "constructorWithObject" : {
+                  "value" : [ {
+                    "kind" : "constructor",
+                    "className" : "com.github.f4b6a3.uuid.codec.base.function.Base16Decoder",
+                    "args" : [ {
+                      "kind" : "object",
+                      "className" : "com.github.f4b6a3.uuid.codec.base.BaseN",
+                      "base64" : "eyJyYWRpeCI6MTYsImxlbmd0aCI6MzIsInBhZGRpbmciOiIwIiwic2Vuc2l0aXZlIjpmYWxzZSwiYWxwaGFiZXQiOnsiYXJyYXkiOlsiMCIsIjEiLCIyIiwiMyIsIjQiLCI1IiwiNiIsIjciLCI4IiwiOSIsImEiLCJiIiwiYyIsImQiLCJlIiwiZiJdfSwibWFwIjp7ImFycmF5IjpbLTEsLTEsLTEsLTEsLTEsLTEsLTEsLTEsLTEsLTEsLTEsLTEsLTEsLTEsLTEsLTEsLTEsLTEsLTEsLTEsLTEsLTEsLTEsLTEsLTEsLTEsLTEsLTEsLTEsLTEsLTEsLTEsLTEsLTEsLTEsLTEsLTEsLTEsLTEsLTEsLTEsLTEsLTEsLTEsLTEsLTEsLTEsLTEsMCwxLDIsMyw0LDUsNiw3LDgsOSwtMSwtMSwtMSwtMSwtMSwtMSwtMSwxMCwxMSwxMiwxMywxNCwxNSwtMSwtMSwtMSwtMSwtMSwtMSwtMSwtMSwtMSwtMSwtMSwtMSwtMSwtMSwtMSwtMSwtMSwtMSwtMSwtMSwtMSwtMSwtMSwtMSwtMSwtMSwtMSwtMSwtMSwtMSwtMSwtMV19fQ=="
+                    } ]
+                  } ],
+                  "valueSetFlag" : true
+                },
+                "factoryWithStringArg" : {
+                  "value" : [ {
+                    "kind" : "factory",
+                    "className" : "java.util.UUID",
+                    "name" : "fromString",
+                    "args" : [ {
+                      "kind" : "string",
+                      "value" : "123e4567-e89b-12d3-a456-426655440002"
+                    } ]
+                  } ],
+                  "valueSetFlag" : true
+                },
+                "factoryNoArgs" : {
+                  "value" : [ {
+                    "kind" : "factory",
+                    "className" : "com.github.f4b6a3.uuid.util.UuidComparator",
+                    "name" : "getDefaultInstance"
+                  } ],
+                  "valueSetFlag" : true
+                },
+                "constructorWithPrimitive" : {
+                  "value" : [ {
+                    "kind" : "constructor",
+                    "className" : "com.github.f4b6a3.uuid.codec.base.BaseN",
+                    "args" : [ {
+                      "kind" : "primitive",
+                      "type" : "int",
+                      "value" : "16"
+                    } ]
+                  } ],
+                  "valueSetFlag" : true
+                }
+              },
+              "exampleSetFlag" : false
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Instance created successfully",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "exampleSetFlag" : false,
+                  "items" : {
+                    "required" : [ "base64", "className" ],
+                    "type" : "object",
+                    "properties" : {
+                      "className" : {
+                        "type" : "string",
+                        "exampleSetFlag" : false
+                      },
+                      "base64" : {
+                        "type" : "string",
+                        "exampleSetFlag" : false
+                      }
+                    },
+                    "exampleSetFlag" : false
+                  }
+                },
+                "example" : [ {
+                  "className" : "java.util.UUID",
+                  "base64" : "IjEyM2U0NTY3LWU4OWItMTJkMy1hNDU2LTQyNjY1NTQ0MDAwMiI="
+                } ],
+                "exampleSetFlag" : true
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
