@@ -1,0 +1,263 @@
+{
+  "openapi" : "3.0.1",
+  "info" : {
+    "title" : "com.github.f4b6a3:uuid-creator:6.1.1",
+    "description" : "A Java library to generate RFC-4122 Universally Unique Identifiers (UUID).",
+    "version" : "1.0.0"
+  },
+  "tags" : [ {
+    "name" : "UuidCreator",
+    "description" : "Facade for everything.\n <p>\n All UUID types can be generated from this entry point."
+  }, {
+    "name" : "Instance-Creator",
+    "description" : "Utility for creating instances of classes using constructors or factory methods."
+  } ],
+  "paths" : {
+    "/getRandomBased" : {
+      "post" : {
+        "tags" : [ "UuidCreator" ],
+        "summary" : "Returns a random-based unique identifier (UUIDv4).",
+        "description" : "getRandomBased()",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "required" : [ "result" ],
+                  "type" : "object",
+                  "properties" : {
+                    "result" : {
+                      "type" : "string",
+                      "format" : "uuid",
+                      "exampleSetFlag" : false
+                    }
+                  },
+                  "exampleSetFlag" : false
+                },
+                "example" : {
+                  "result" : "d2d2d74b-7389-4e84-b9b3-9d442129f357"
+                },
+                "exampleSetFlag" : true
+              }
+            }
+          }
+        }
+      }
+    },
+    "/getTimeBased" : {
+      "post" : {
+        "tags" : [ "UuidCreator" ],
+        "summary" : "Returns a time-based unique identifier (UUIDv1).\n <p>\n The default node identifier is a random number that is generated once at\n initialization.\n <p>\n A custom node identifier can be provided by the system property\n 'uuidcreator.node' or the environment variable 'UUIDCREATOR_NODE'.",
+        "description" : "getTimeBased()",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "required" : [ "result" ],
+                  "type" : "object",
+                  "properties" : {
+                    "result" : {
+                      "type" : "string",
+                      "format" : "uuid",
+                      "exampleSetFlag" : false
+                    }
+                  },
+                  "exampleSetFlag" : false
+                },
+                "example" : {
+                  "result" : "638bdbd5-bc68-4a6b-bd48-392a35719b09"
+                },
+                "exampleSetFlag" : true
+              }
+            }
+          }
+        }
+      }
+    },
+    "/instances" : {
+      "post" : {
+        "tags" : [ "Instance-Creator" ],
+        "summary" : "Create an instance",
+        "description" : "Creates an instance based on the provided constructor or factory definition.",
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "type" : "array",
+                "exampleSetFlag" : false,
+                "items" : {
+                  "exampleSetFlag" : false,
+                  "oneOf" : [ {
+                    "required" : [ "className", "kind" ],
+                    "type" : "object",
+                    "properties" : {
+                      "kind" : {
+                        "type" : "string",
+                        "exampleSetFlag" : false,
+                        "enum" : [ "constructor" ]
+                      },
+                      "className" : {
+                        "type" : "string",
+                        "exampleSetFlag" : false
+                      },
+                      "args" : {
+                        "type" : "array",
+                        "exampleSetFlag" : false,
+                        "items" : {
+                          "required" : [ "kind" ],
+                          "type" : "object",
+                          "properties" : {
+                            "kind" : {
+                              "type" : "string",
+                              "exampleSetFlag" : false
+                            },
+                            "className" : {
+                              "type" : "string",
+                              "exampleSetFlag" : false
+                            },
+                            "base64" : {
+                              "type" : "string",
+                              "exampleSetFlag" : false
+                            }
+                          },
+                          "exampleSetFlag" : false
+                        }
+                      }
+                    },
+                    "exampleSetFlag" : false
+                  }, {
+                    "required" : [ "className", "kind" ],
+                    "type" : "object",
+                    "properties" : {
+                      "kind" : {
+                        "type" : "string",
+                        "exampleSetFlag" : false,
+                        "enum" : [ "factory" ]
+                      },
+                      "className" : {
+                        "type" : "string",
+                        "exampleSetFlag" : false
+                      },
+                      "name" : {
+                        "type" : "string",
+                        "exampleSetFlag" : false
+                      },
+                      "args" : {
+                        "type" : "array",
+                        "exampleSetFlag" : false,
+                        "items" : {
+                          "required" : [ "kind" ],
+                          "type" : "object",
+                          "properties" : {
+                            "kind" : {
+                              "type" : "string",
+                              "exampleSetFlag" : false
+                            },
+                            "value" : {
+                              "type" : "string",
+                              "exampleSetFlag" : false
+                            },
+                            "type" : {
+                              "type" : "string",
+                              "exampleSetFlag" : false
+                            }
+                          },
+                          "exampleSetFlag" : false
+                        }
+                      }
+                    },
+                    "exampleSetFlag" : false
+                  } ]
+                }
+              },
+              "examples" : {
+                "constructorWithObject" : {
+                  "value" : [ {
+                    "kind" : "constructor",
+                    "className" : "com.github.f4b6a3.uuid.codec.base.function.Base16Decoder",
+                    "args" : [ {
+                      "kind" : "object",
+                      "className" : "com.github.f4b6a3.uuid.codec.base.BaseN",
+                      "base64" : "eyJyYWRpeCI6MTYsImxlbmd0aCI6MzIsInBhZGRpbmciOiIwIiwic2Vuc2l0aXZlIjpmYWxzZSwiYWxwaGFiZXQiOnsiYXJyYXkiOlsiMCIsIjEiLCIyIiwiMyIsIjQiLCI1IiwiNiIsIjciLCI4IiwiOSIsImEiLCJiIiwiYyIsImQiLCJlIiwiZiJdfSwibWFwIjp7ImFycmF5IjpbLTEsLTEsLTEsLTEsLTEsLTEsLTEsLTEsLTEsLTEsLTEsLTEsLTEsLTEsLTEsLTEsLTEsLTEsLTEsLTEsLTEsLTEsLTEsLTEsLTEsLTEsLTEsLTEsLTEsLTEsLTEsLTEsLTEsLTEsLTEsLTEsLTEsLTEsLTEsLTEsLTEsLTEsLTEsLTEsLTEsLTEsLTEsLTEsMCwxLDIsMyw0LDUsNiw3LDgsOSwtMSwtMSwtMSwtMSwtMSwtMSwtMSwxMCwxMSwxMiwxMywxNCwxNSwtMSwtMSwtMSwtMSwtMSwtMSwtMSwtMSwtMSwtMSwtMSwtMSwtMSwtMSwtMSwtMSwtMSwtMSwtMSwtMSwtMSwtMSwtMSwtMSwtMSwtMSwtMSwtMSwtMSwtMSwtMSwtMV19fQ=="
+                    } ]
+                  } ],
+                  "valueSetFlag" : true
+                },
+                "factoryWithStringArg" : {
+                  "value" : [ {
+                    "kind" : "factory",
+                    "className" : "java.util.UUID",
+                    "name" : "fromString",
+                    "args" : [ {
+                      "kind" : "string",
+                      "value" : "123e4567-e89b-12d3-a456-426655440002"
+                    } ]
+                  } ],
+                  "valueSetFlag" : true
+                },
+                "factoryNoArgs" : {
+                  "value" : [ {
+                    "kind" : "factory",
+                    "className" : "com.github.f4b6a3.uuid.util.UuidComparator",
+                    "name" : "getDefaultInstance"
+                  } ],
+                  "valueSetFlag" : true
+                },
+                "constructorWithPrimitive" : {
+                  "value" : [ {
+                    "kind" : "constructor",
+                    "className" : "com.github.f4b6a3.uuid.codec.base.BaseN",
+                    "args" : [ {
+                      "kind" : "primitive",
+                      "type" : "int",
+                      "value" : "16"
+                    } ]
+                  } ],
+                  "valueSetFlag" : true
+                }
+              },
+              "exampleSetFlag" : false
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Instance created successfully",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "exampleSetFlag" : false,
+                  "items" : {
+                    "required" : [ "base64", "className" ],
+                    "type" : "object",
+                    "properties" : {
+                      "className" : {
+                        "type" : "string",
+                        "exampleSetFlag" : false
+                      },
+                      "base64" : {
+                        "type" : "string",
+                        "exampleSetFlag" : false
+                      }
+                    },
+                    "exampleSetFlag" : false
+                  }
+                },
+                "example" : [ {
+                  "className" : "java.util.UUID",
+                  "base64" : "IjEyM2U0NTY3LWU4OWItMTJkMy1hNDU2LTQyNjY1NTQ0MDAwMiI="
+                } ],
+                "exampleSetFlag" : true
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
