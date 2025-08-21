@@ -5,16 +5,19 @@ import com.fasterxml.jackson.annotation.JsonValue;
 
 import java.util.Locale;
 
-
-public enum InstanceKind {
-
-    OBJECT("object"),
-    FACTORY("factory"),
-    CONSTRUCTOR("constructor");
+public enum Type {
+    INT("int"),
+    LONG("long"),
+    DOUBLE("double"),
+    FLOAT("float"),
+    SHORT("short"),
+    BYTE("byte"),
+    CHAR("char"),
+    BOOLEAN("boolean");
 
     private final String value;
 
-    InstanceKind(String value) {
+    Type(String value) {
         this.value = value;
     }
 
@@ -24,7 +27,7 @@ public enum InstanceKind {
     }
 
     @JsonCreator
-    public static InstanceKind fromValue(String value) {
-        return InstanceKind.valueOf(value.toUpperCase(Locale.ROOT));
+    public static Type fromValue(String value) {
+        return Type.valueOf(value.toUpperCase(Locale.ROOT));
     }
 }

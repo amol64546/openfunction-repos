@@ -263,6 +263,8 @@ public class InstanceUtils {
                 return short.class;
             case "char":
                 return char.class;
+//            case "string":
+//                return String.class;
             default:
                 try {
                     return Class.forName(type);
@@ -283,6 +285,7 @@ public class InstanceUtils {
             case "byte" -> Byte.parseByte(value);
             case "short" -> Short.parseShort(value);
             case "char" -> (value != null && !value.isEmpty()) ? value.charAt(0) : '\0';
+//            case "string" -> value;
             default -> value;
         };
     }

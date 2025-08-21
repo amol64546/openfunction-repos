@@ -4,7 +4,7 @@
          http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.openfunction</groupId>
-    <artifactId>test-uuidcomparator-11</artifactId>
+    <artifactId>test-uuidcomparator-12</artifactId>
     <version>1.0.0</version>
     <properties>
         <maven.compiler.source>18</maven.compiler.source>
@@ -30,16 +30,6 @@
             <groupId>com.squareup.moshi</groupId>
             <artifactId>moshi</artifactId>
             <version>1.15.1</version>
-        </dependency>
-        <dependency>
-            <groupId>org.eclipse.jetty</groupId>
-            <artifactId>jetty-server</artifactId>
-            <version>11.0.20</version>
-        </dependency>
-        <dependency>
-            <groupId>org.eclipse.jetty</groupId>
-            <artifactId>jetty-servlet</artifactId>
-            <version>11.0.20</version>
         </dependency>
     </dependencies>
     <build>

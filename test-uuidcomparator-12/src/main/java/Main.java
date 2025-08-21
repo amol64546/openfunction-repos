@@ -24,21 +24,7 @@ public class Main extends Routable implements HttpFunction {
       new HashMap<>();
 
   static {
-    pathHandlers.put("/defaultCompare", Main::defaultCompare);
-    pathHandlers.put("/opaqueCompare", Main::opaqueCompare);
     pathHandlers.put("/compare", Main::compare);
-  }
-
-  private static Object defaultCompare(Map<String, Object> body) {
-    UUID uuid1 = InstanceUtils.getInstance(body, "uuid1");
-    UUID uuid2 = InstanceUtils.getInstance(body, "uuid2");
-    return UuidComparator.defaultCompare(uuid1, uuid2);
-  }
-
-  private static Object opaqueCompare(Map<String, Object> body) {
-    UUID uuid1 = InstanceUtils.getInstance(body, "uuid1");
-    UUID uuid2 = InstanceUtils.getInstance(body, "uuid2");
-    return UuidComparator.opaqueCompare(uuid1, uuid2);
   }
 
   private static Object compare(Map<String, Object> body) {
@@ -68,10 +54,6 @@ public class Main extends Routable implements HttpFunction {
     } else {
       response.setStatusCode(404);
       response.getWriter().write("Path Not Found");
-      try (var writer = response.getWriter()) {
-        writer.write("Path Not Found");
-        writer.flush();
-      }
     }
   }
 
@@ -85,9 +67,5 @@ public class Main extends Routable implements HttpFunction {
     responseBody.put("result", result);
     response.setContentType("application/json");
     response.getWriter().write(JACKSON.writeValueAsString(responseBody));
-    try (var writer = response.getWriter()) {
-      writer.write(JACKSON.writeValueAsString(responseBody));
-      writer.flush();
-    }
   }
 }
