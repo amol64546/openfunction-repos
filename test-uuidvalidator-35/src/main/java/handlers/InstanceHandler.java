@@ -90,11 +90,19 @@ public class InstanceHandler {
     private static void sendSuccessResponse(HttpResponse response, CreateInstanceResponse createInstanceResponse) throws IOException {
         response.setContentType("application/json");
         response.getWriter().write(JACKSON.writeValueAsString(createInstanceResponse));
+        try (var writer = response.getWriter()) {
+            writer.write(JACKSON.writeValueAsString(createInstanceResponse));
+            writer.flush();
+        }
     }
 
     private static void sendErrorResponse(HttpResponse response, Map<String, String> error) throws IOException {
         response.setContentType("application/json");
         response.getWriter().write(JACKSON.writeValueAsString(error));
+        try (var writer = response.getWriter()) {
+            writer.write(JACKSON.writeValueAsString(error));
+            writer.flush();
+        }
     }
 
 }

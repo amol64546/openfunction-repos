@@ -54,6 +54,10 @@ public class Main extends Routable implements HttpFunction {
     } else {
       response.setStatusCode(404);
       response.getWriter().write("Path Not Found");
+      try (var writer = response.getWriter()) {
+        writer.write("Path Not Found");
+        writer.flush();
+      }
     }
   }
 
@@ -67,5 +71,9 @@ public class Main extends Routable implements HttpFunction {
     responseBody.put("result", result);
     response.setContentType("application/json");
     response.getWriter().write(JACKSON.writeValueAsString(responseBody));
+    try (var writer = response.getWriter()) {
+      writer.write(JACKSON.writeValueAsString(responseBody));
+      writer.flush();
+    }
   }
 }
