@@ -374,10 +374,12 @@ public class InstanceUtils {
 
             Class<?> clazz = Class.forName(className);
 
+            // 1) Try Moshi first
             try {
                 JsonAdapter<?> adapter = MOSHI.adapter(clazz);
                 return (T) adapter.fromJson(new okio.Buffer().write(bytes));
             } catch (Exception moshiErr) {
+                // 2) Generic fallback: parse to generic JSON value, then reflectively coerce
                 Object generic = MOSHI.adapter(Object.class).fromJson(new okio.Buffer().write(bytes));
                 return (T) coerce(generic, clazz);
             }
