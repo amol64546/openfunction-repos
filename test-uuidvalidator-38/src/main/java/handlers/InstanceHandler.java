@@ -104,19 +104,11 @@ public class InstanceHandler {
     private static void sendSuccessResponse(HttpResponse response, List<CreateInstanceResponse> createInstanceResponses) throws IOException {
         response.setContentType("application/json");
         response.getWriter().write(JACKSON.writeValueAsString(createInstanceResponses));
-        try (var writer = response.getWriter()) {
-            writer.write(JACKSON.writeValueAsString(createInstanceResponses));
-            writer.flush();
-        }
     }
 
     private static void sendErrorResponse(HttpResponse response, Map<String, String> error) throws IOException {
         response.setContentType("application/json");
         response.getWriter().write(JACKSON.writeValueAsString(error));
-        try (var writer = response.getWriter()) {
-            writer.write(JACKSON.writeValueAsString(error));
-            writer.flush();
-        }
     }
 
 }

@@ -15,10 +15,6 @@ public class SwaggerHandler {
         String filePath = "src/main/resources/swagger-ui" + request.getPath().substring("/swagger-ui".length());
         byte[] fileContent = Files.readAllBytes(Paths.get(filePath));
         response.getOutputStream().write(fileContent);
-        try (var out = response.getOutputStream()) {
-            out.write(fileContent);
-            out.flush();
-        }
     }
 
     public static void handlerSwaggerJson(HttpRequest request, HttpResponse response) throws IOException {
